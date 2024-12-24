@@ -1,11 +1,21 @@
 const express = require("express");
-const app = express();
-const port = 3000;
+const cors = require("cors");
+const morgan = require("morgan");
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+const app = express();
+
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
+
+app.use("/api/v1/todos", todoRoutes);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Internal server error!" });
 });
 
-app.listen(port, () => {
+const PORT = 3000;
+app.listen(PORT, () => {
   console.log(`App listening on port ${port}`);
 });
