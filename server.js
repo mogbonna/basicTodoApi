@@ -8,8 +8,14 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
-const PORT = 3000;
+app.use("/api/v1/todos", todoRoutes);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Internal server error!" });
+});
+
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`App listening on port ${port}`);
 });
